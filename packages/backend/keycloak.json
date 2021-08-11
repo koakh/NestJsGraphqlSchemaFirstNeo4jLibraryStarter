@@ -1,0 +1,12 @@
+{
+  "realm": "Demo-Realm",
+  "auth-server-url": "https://auth.koakh.com/auth",
+  "ssl-required": "external",
+  "resource": "nest-api",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "f2912fae-a536-4685-a477-b59582bee3cb"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}

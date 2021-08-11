@@ -1,0 +1,24 @@
+Project:
+  ✔ add lerna to project @done(21-08-11 21:49)
+  ☐ create a neo4j ogm driver standalone package, or just a module
+  ☐ userService with neo4j
+  ☐ finishe all http.client operations, after we have usernames and uuid created with neo4j userService
+  ☐ get seed ogm script from neo4j lib sample, and other cool stuff to
+  ☐ configure husky
+  ☐ @high create a repo for this neo4j starter
+  ☐ put debugger working only with f5
+  ✔ add @koakh/nestjs-package-jwt-authentication-graphql @done(21-08-07 01:19)
+  ✔ add https and certificates @done(21-08-06 23:46)
+  ✔ change default port @done(21-08-06 23:46)
+  ☐ remove or reuse path starter/src/shared
+  ☐ run npm-check and remove non used packages
+  ☐ @high  put npm run generate-typings working
+  ☐ add all neo4 operations to client.http from other project, and merge with auth
+  ☐ @critical UnhandledPromiseRejectionWarning: Error: You must `await server.start()` before calling `server.applyMiddleware()` at ApolloServer
+    https://stackoverflow.com/questions/68354656/unhandledpromiserejectionwarning-error-you-must-await-server-start-before
+    must use apollo-server-express@^2, try use ^3 in a near future
+    seems that this comes from nestjs starter and don't have neo4j directives
+      Unknown directive "@cypher".
+      Unknown directive "@auth".
+      Unknown directive "@id".
+  ☐ create a repo for project and share it with folks from neo4j, with a seeded neo4j db

@@ -1,0 +1,244 @@
+# file copied from
+# koakh-laptop:/home/mario/Development/Neo4j/BuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary/src/schema.graphql
+
+# The @relationship directive is used to define relationships.
+# DateTime and Point scalar types are available and map to the equivalent native Neo4j database types.
+# The @timestamp directive is used to indicate the property will be automatically updated when the node is created and updated.
+# The @id directive marks a field as a unique identifier and enables auto-generation when the node is created.
+
+type Order {
+  orderID: ID! @id
+  placedAt: DateTime @timestamp
+  shippingCost: Float
+  shipTo: Address @relationship(type: "SHIPS_TO", direction: OUT)
+  customer: Customer @relationship(type: "PLACED", direction: IN)
+  books: [Book] @relationship(type: "CONTAINS", direction: OUT)
+}
+
+extend type Order {
+  subTotal: Float @cypher(statement:"MATCH (this)-[:CONTAINS]->(b:Book) RETURN sum(b.price)")
+  shippingCost: Float @cypher(statement: """
+    MATCH (this)-[:SHIPS_TO]->(a:Address)
+    RETURN round(0.01 * distance(a.location, Point({latitude: 40.7128, longitude: -74.0060})) / 1000, 2)
+  """)  
+  shippingDistance: Float @cypher(statement: """
+    MATCH (this)-[:SHIPS_TO]->(a:Address)
+    RETURN round(distance(a.location, Point({latitude: 40.7128, longitude: -74.0060})) / 1000, 2)
+  """)
+}
+
+type Customer {
+  username: String
+  orders: [Order] @relationship(type: "PLACED", direction: OUT)
+  reviews: [Review] @relationship(type: "WROTE", direction: OUT)
+}
+
+extend type Customer {
+  recommended(limit: Int = 3): [Book] @cypher(statement: """
+    MATCH (this)-[:PLACED]->(:Order)-[:CONTAINS]->(:Book)<-[:CONTAINS]-(:Order)<-[:PLACED]-(c:Customer)
+    MATCH (c)-[:PLACED]->(:Order)-[:CONTAINS]->(rec:Book)
+    WHERE NOT EXISTS((this)-[:PLACED]->(:Order)-[:CONTAINS]->(rec))
+    RETURN rec LIMIT $limit
+  """)
+}
+
+type Address {
+  address: String
+  location: Point
+  order: Order @relationship(type: "SHIPS_TO", direction: IN)
+}
+
+type Book {
+  isbn: ID!
+  title: String
+  price: Float
+  description: String
+  authors: [Author] @relationship(type: "AUTHOR_OF", direction: IN)
+  reviews: [Review] @relationship(type: "REVIEWS", direction: OUT)
+  subjects: [Subject] @relationship(type: "ABOUT", direction: OUT)
+}
+
+type Review {
+  rating: Int
+  text: String
+  createdAt: DateTime @timestamp
+  book: Book @relationship(type: "REVIEWS", direction: OUT)
+  author: Customer @relationship(type: "WROTE", direction: IN)
+}
+
+type Author {
+  name: String
+  books: [Book] @relationship(type: "AUTHOR_OF", direction: OUT)
+}
+
+type Subject {
+  name: String
+  books: [Book] @relationship(type: "ABOUT", direction: IN)
+}
+
+type Weather {
+  temperature: Int
+  windSpeed: Int
+  windDirection: String
+  precipitation: String
+  summary: String
+}
+
+extend type Address {
+  currentWeather: Weather @cypher(statement:"""
+  WITH 'https://www.7timer.info/bin/civil.php' AS baseURL, this
+  CALL apoc.load.json(
+    baseURL + '?lon=' + this.location.longitude + '&lat=' + this.location.latitude + '&ac=0&unit=metric&output=json')
+    YIELD value WITH value.dataseries[0] as weather
+    RETURN {
+      temperature: weather.temp2m,
+      windSpeed: weather.wind10m.speed,
+      windDirection: weather.wind10m.direction,
+      precipitation: weather.prec_type,
+      summary: weather.weather}
+    AS conditions
+  """)
+}
+
+# custom Query Field
+# we can use the @cypher directive on Query fields to compliment the auto-generated Query fields provided by the Neo4j GraphQL Library. Perhaps we want to leverage a full-text index for fuzzy matching for book searches?
+type Query {
+  bookSearch(searchString: String!): [Book] @cypher(statement: """
+  CALL db.index.fulltext.queryNodes('bookIndex', $searchString+'~')
+  YIELD node RETURN node
+  """)
+}
+
+# custom Mutation Field
+# similar to adding Query fields, we can use @cypher schema directives to add new Mutation fields. This is useful in cases where we have specific logic we’d like to take into account when creating or updating data. Here we make use of the MERGE Cypher clause to avoid creating duplicate Subject nodes and connecting them to books.
+type Mutation {
+  mergeBookSubjects(subject: String!, bookTitles: [String!]!): Subject @cypher(statement: """
+  MERGE (s:Subject {name: $subject})
+  WITH s
+  UNWIND $bookTitles AS bookTitle
+  MATCH (t:Book {title: bookTitle})
+  MERGE (t)-[:ABOUT]->(s)
+  RETURN s
+  """)
+}
+
+# custom Resolvers
+# combining the power of Cypher and GraphQL is extremely powerful, however there are bound to be some cases where we want to add custom logic using code by implementing resolver functions. This might be where we want to fetch data from another database, API, or system. Let’s consider a contrived example where we compute an estimated delivery date using a custom resolver function.
+# Now it’s time to implement our Order.estimatedDelivery resolver function. Our function simply calculates a random date - but the point is that this can be any custom logic we choose to define.
+extend type Order {
+  estimatedDelivery: DateTime @ignore
+}
+
+extend type Book {
+  similar: [Book] @cypher(statement: """
+    MATCH (this)-[:ABOUT]->(s:Subject)
+    WITH this, COLLECT(id(s)) AS s1
+    MATCH (b:Book)-[:ABOUT]->(s:Subject) WHERE b <> this
+    WITH this, b, s1, COLLECT(id(s)) AS s2
+    WITH b, gds.alpha.similarity.jaccard(s2, s2) AS jaccard
+    ORDER BY jaccard DESC
+    RETURN b LIMIT 1
+  """)
+}
+
+# auth
+
+# isAuthenticated
+# make use of the isAuthenticated authorization rule in our bookstore GraphQL API to
+# protect the Subject type. Let’s say we want to make returning a book’s subjects a
+# "premium" feature to encourage users to sign-up for our application
+extend type Subject @auth(
+  rules: [
+    {isAuthenticated: true}
+  ]
+)
+
+# Roles
+# which means that this user has the "ROLE_ADMIN" role. Let’s add a rule to our GraphQL 
+# type definitions that in order to create, update, or delete books, the user must
+# have the "ROLE_ADMIN" role.
+# note that we’ve included the operations array to specify this rule only applies
+# to CREATE, UPDATE, and DELETE operations - all users will still be able to read book
+# objects, but if any request tries to create or update a book the operation will fail
+# unless a valid "ROLE_ADMIN" role is included in the token.
+extend type Book @auth(
+  rules: [
+    {operations: 
+      [CREATE,UPDATE,DELETE], 
+      roles: ["ROLE_ADMIN"]
+    }
+  ]
+)
+
+# Allow
+# A customer must not be able to view orders placed by other customers. Adding an Allow
+# rule will allow us to protect orders from other nosy customers.
+# Here we add a rule to the Order type that a customer’s "sub" (the subject) claim in
+# the JWT must match the username of the customer who placed the order.
+# extend type Order @auth(rules: [{allow: {customer: {username: "$jwt.sub"}}}])
+# Of course we will also allow ROLE_ADMINs to have access to orders, so let’s update the
+# rule to also grant access to any requests with the "ROLE_ADMIN" role:
+extend type Order @auth(
+  rules: [
+    {operations: 
+      [CREATE,UPDATE,DELETE],
+      roles: ["ROLE_ADMIN"]},
+    {allow: 
+      {customer: {username: "$jwt.sub"}}
+    },
+    {roles: 
+      ["ROLE_ADMIN"]
+    }
+])
+
+# Where
+# In the previous example the client was required to filter for orders that the 
+# customer had placed. We don’t always want to expect the client to include this
+# filtering logic in the GraphQL query. In some cases we simply want to return whatever
+# data the currently authenticated user has access to. For these cases we can use a
+# Where authorization rule to apply a filter to the generated database queries - 
+# ensuring only the data the user has access to is returned.
+#
+# We want a user to only be able to view their own customer information.
+# Here we add a rule to the Customer type that will apply a filter any time the
+# customer type is accessed that filters for the currently authenticated customer
+# by adding a predicate that matches the username property to the sub claim in the JWT.
+extend type Customer @auth(
+  rules: [
+    {operations: 
+      [CREATE,UPDATE,DELETE],
+      roles: ["ROLE_ADMIN"]
+    },
+    {where: {
+      username: "$jwt.sub"}
+    },
+    {roles: 
+      ["ROLE_ADMIN"]
+    }
+  ]
+)
+
+# Note that our query doesn’t specify which customer to return - we’re requesting all
+# customers - but we only get back the customer that we have access to.
+
+# Bind
+# The final type of authorization rule that we will explore is the Bind rule.
+# Bind allows us to specify connections that must exist in the graph when creating or
+# updating data based on claims in the JWT.
+#
+# We want to add a rule that when creating a review, the review node is connected to
+# the currently authenticated customer - we don’t want customers to be writing
+# reviews on behalf of other users! This rule means the username of the author of a
+# review must match the sub claim in the JWT when creating or updating reviews:
+extend type Review @auth(
+  rules: [
+    {operations: 
+      [CREATE,UPDATE],
+      roles: ["ROLE_ADMIN"]
+      bind: {author: {username: "$jwt.sub"} }
+    },
+    {roles: 
+      ["ROLE_ADMIN"]
+    }
+  ]
+)

@@ -1,0 +1,28 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "lerna-update-wizard": "^0.17.8",
+    "npm-check": "^5.9.2",
+    "npm-check-updates": "^11.8.3"
+  },
+  "scripts": {
+    "lerna:install": "lerna bootstrap",
+    "lerna:build": "lerna run build",
+    "lerna:test": "lerna exec npm run test",
+
+    "// @koakh/nest-js-graphql-schema-first-neo4j-library-starter": "",
+    "pkg:backend:start:dev": "npx lerna run start:dev --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+    "pkg:backend:start:debug": "npx lerna run start:debug --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+    "pkg:backend:start:prod": "npx lerna run start:prod --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+    "pkg:backend:build": "npx lerna run build --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+    "pkg:backend:npm-check": "npx lerna run npm-check --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+
+    "pkg:backend:docker:build": "npx lerna run docker:build --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+    "pkg:backend:docker:push": "npx lerna run docker:push --scope @koakh/nest-js-graphql-schema-first-neo4j-library-starter --stream",
+
+    "// koakh-nestjs-react-starter": "",
+    "pkg:react:start": "npx lerna run start --scope @koakh/koakh-nestjs-react-starter --stream"
+  }
+}
