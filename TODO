@@ -1,5 +1,6 @@
 Project:
   ✔ add lerna to project @done(21-08-11 21:49)
+  ☐ @critical must use capitalized Bearer with neo4j?
   ☐ create a neo4j ogm driver standalone package, or just a module
   ☐ userService with neo4j
   ☐ finishe all http.client operations, after we have usernames and uuid created with neo4j userService

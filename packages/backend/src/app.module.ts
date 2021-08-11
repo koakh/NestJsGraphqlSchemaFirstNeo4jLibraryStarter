@@ -11,6 +11,7 @@ import { constants as userConstants } from './user/user.constants';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { neo4jDriver as driver } from './common/config/neo4j.config';
+import { OgmService } from './common/modules/ogm/ogm.service';
 
 @Global()
 @Module({
@@ -99,7 +100,7 @@ import { neo4jDriver as driver } from './common/config/neo4j.config';
     //   introspection: true,
     //   playground: true
     //   // tip use `npm run generate-typings`
-    //   // @nestjs/graphql package can automatically generate TypeScript definitions from the abstract syntax 
+    //   // @nestjs/graphql package can automatically generate TypeScript definitions from the abstract syntax
     //   // tree (AST). To enable this feature, add the definitions options property when configuring the GraphQLModule.
     //   // definitions: {
     //   //   path: join(process.cwd(), 'src/graphql.schema.ts'),
@@ -110,6 +111,7 @@ import { neo4jDriver as driver } from './common/config/neo4j.config';
   ],
   providers: [
     UserService,
+    OgmService,
   ],
   exports: [
     UserService,
