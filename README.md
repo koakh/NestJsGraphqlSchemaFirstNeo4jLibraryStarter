@@ -8,7 +8,7 @@ A minimal nestjs/neo4j graphql library starter, to follow graphacademy `intro to
 
 ## Links Lib Docs
 
-- [Type Definitions - Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/type-definitions/)
+- [Neo4j GraphQL Library - Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/)
 
 ## Important NOTES
 
