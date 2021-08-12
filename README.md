@@ -1,22 +1,28 @@
 # README
 
-A minimal nestjs starter, to follow graphacademy `intro to graphql & neo4j - building graphql apis using the neo4j graphql library` tutorial
+A minimal nestjs/neo4j graphql library starter, to follow graphacademy `intro to graphql & neo4j - building graphql apis using the neo4j graphql library` tutorial
+
+## Links
+
+- [Intro To GraphQL & Neo4j - Building GraphQL APIs Using The Neo4j GraphQL Library](https://neo4j.com/graphacademy/training-graphql-apis/01-graphql-apis-intro-to-graphql/)
+
+## Links Lib Docs
+
+- [Type Definitions - Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/type-definitions/)
 
 ## Important NOTES
 
-Neo4j/BuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary/schema.graphql
-    admin
-Neo4j/NestJsGraphqlSchemaFirstNeo4jLibraryStarter/packages/backend/src/schema.graphql
-    ROLE_ADMIN
+there are two similar projects to follow tutorial, a simple one with nodejs and a nestjs, nestjs is more like a starter with authentication and lerna, useful if one needs to bootstrap a neo4j graphql based project boilerplate, project repositories are here:
 
-- [Troubleshooting - Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/troubleshooting/)
+- [TypescriptNodeBuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary](https://github.com/koakh/TypescriptNodeBuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary)
+- [NestJsGraphqlSchemaFirstNeo4jLibraryStarter](https://github.com/koakh/NestJsGraphqlSchemaFirstNeo4jLibraryStarter)
 
-- `@neo4j/graphql:*` - Logs all
-- `@neo4j/graphql:auth` - Logs the status of authorization header and token extraction, and decoding of JWT
-- `@neo4j/graphql:graphql` - Logs the GraphQL query and variables
-- `@neo4j/graphql:execute` - Logs the Cypher and Cypher paramaters before execution, and summary of execution
+there are some files in common like
 
-ex add `DEBUG=@neo4j/graphql:auth` to `debug` script
+`Neo4j/BuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary/schema.graphql`
+  diferences in user roles: `admin`
+`Neo4j/NestJsGraphqlSchemaFirstNeo4jLibraryStarter/packages/backend/src/schema.graphql`
+  diferences in user roles: `ROLE_ADMIN`
 
 ## Launch database and seed data
 

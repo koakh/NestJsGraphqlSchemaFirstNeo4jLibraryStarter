@@ -135,8 +135,13 @@ Potential solutions:
 
 > Leave keycloak for now
 
-## 
+## Debug Neo4j GraphQL Library
 
-## GraphQL
+- [Troubleshooting - Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/troubleshooting/)
 
+- `@neo4j/graphql:*` - Logs all
+- `@neo4j/graphql:auth` - Logs the status of authorization header and token extraction, and decoding of JWT
+- `@neo4j/graphql:graphql` - Logs the GraphQL query and variables
+- `@neo4j/graphql:execute` - Logs the Cypher and Cypher paramaters before execution, and summary of execution
 
+ex add `DEBUG=@neo4j/graphql:auth` to `debug` script
