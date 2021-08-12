@@ -20,7 +20,7 @@ extend type Order {
   shippingCost: Float @cypher(statement: """
     MATCH (this)-[:SHIPS_TO]->(a:Address)
     RETURN round(0.01 * distance(a.location, Point({latitude: 40.7128, longitude: -74.0060})) / 1000, 2)
-  """)  
+  """)
   shippingDistance: Float @cypher(statement: """
     MATCH (this)-[:SHIPS_TO]->(a:Address)
     RETURN round(distance(a.location, Point({latitude: 40.7128, longitude: -74.0060})) / 1000, 2)
@@ -154,7 +154,7 @@ extend type Subject @auth(
 )
 
 # Roles
-# which means that this user has the "ROLE_ADMIN" role. Let’s add a rule to our GraphQL 
+# which means that this user has the "ROLE_ADMIN" role. Let’s add a rule to our GraphQL
 # type definitions that in order to create, update, or delete books, the user must
 # have the "ROLE_ADMIN" role.
 # note that we’ve included the operations array to specify this rule only applies
@@ -163,8 +163,8 @@ extend type Subject @auth(
 # unless a valid "ROLE_ADMIN" role is included in the token.
 extend type Book @auth(
   rules: [
-    {operations: 
-      [CREATE,UPDATE,DELETE], 
+    {operations:
+      [CREATE,UPDATE,DELETE],
       roles: ["ROLE_ADMIN"]
     }
   ]
@@ -180,23 +180,23 @@ extend type Book @auth(
 # rule to also grant access to any requests with the "ROLE_ADMIN" role:
 extend type Order @auth(
   rules: [
-    {operations: 
+    {operations:
       [CREATE,UPDATE,DELETE],
       roles: ["ROLE_ADMIN"]},
-    {allow: 
+    {allow:
       {customer: {username: "$jwt.sub"}}
     },
-    {roles: 
+    {roles:
       ["ROLE_ADMIN"]
     }
 ])
 
 # Where
-# In the previous example the client was required to filter for orders that the 
+# In the previous example the client was required to filter for orders that the
 # customer had placed. We don’t always want to expect the client to include this
 # filtering logic in the GraphQL query. In some cases we simply want to return whatever
 # data the currently authenticated user has access to. For these cases we can use a
-# Where authorization rule to apply a filter to the generated database queries - 
+# Where authorization rule to apply a filter to the generated database queries -
 # ensuring only the data the user has access to is returned.
 #
 # We want a user to only be able to view their own customer information.
@@ -205,15 +205,16 @@ extend type Order @auth(
 # by adding a predicate that matches the username property to the sub claim in the JWT.
 extend type Customer @auth(
   rules: [
-    {operations: 
+    {operations:
       [CREATE,UPDATE,DELETE],
       roles: ["ROLE_ADMIN"]
     },
     {where: {
       username: "$jwt.sub"}
     },
-    {roles: 
-      ["ROLE_ADMIN"]
+    {roles:
+      # required customer to use query customers/ROLE_USER, ex in booksRecommendedBooks
+      ["ROLE_ADMIN", "ROLE_USER"]
     }
   ]
 )
@@ -232,12 +233,12 @@ extend type Customer @auth(
 # review must match the sub claim in the JWT when creating or updating reviews:
 extend type Review @auth(
   rules: [
-    {operations: 
+    {operations:
       [CREATE,UPDATE],
       roles: ["ROLE_ADMIN"]
       bind: {author: {username: "$jwt.sub"} }
     },
-    {roles: 
+    {roles:
       ["ROLE_ADMIN"]
     }
   ]

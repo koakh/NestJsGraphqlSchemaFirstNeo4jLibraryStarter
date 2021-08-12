@@ -1,3 +1,6 @@
+### ------------------------------------------------------------------------
+### variables
+### ------------------------------------------------------------------------
 @host = 127.0.0.1
 @port = 3443
 @baseUri = https://{{host}}:{{port}}
@@ -336,6 +339,7 @@ subscription userProfileUpdated {
 ### neo4j dataModel
 ### bellow is copied from
 ### koakh-laptop;/home/mario/Development/Neo4j/BuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary/client.http
+### MATCH (n) DETACH DELETE n
 ### ------------------------------------------------------------------------
 
 ### seedDatabaseCreateBooks
@@ -354,14 +358,16 @@ mutation {
         title: "Graph Algorithms"
         price: 37.48
         description: "Practical Examples in Apache Spark and Neo4j"
-        subjects: { create: [
-          {node: { name: "Graph theory" }},
-          {node: { name: "Neo4j" }}
-        ]}
+        subjects: {
+          create: [
+            { node: { name: "Graph theory" } }
+            { node: { name: "Neo4j" } }
+          ]
+        }
         authors: {
           create: [
-            {node: { name: "Mark Needham" }},
-            {node: { name: "Amy E. Hodler" }}
+            { node: { name: "Mark Needham" } }
+            { node: { name: "Amy E. Hodler" } }
           ]
         }
       }
@@ -370,26 +376,26 @@ mutation {
         title: "Inspired"
         price: 21.38
         description: "How to Create Tech Products Customers Love"
-        subjects: { create: [
-          {node: { name: "Product management" }},
-          {node: { name: "Design" }}
-        ]}
-        authors: { create:
-          {node: { name: "Marty Cagan" }}
+        subjects: {
+          create: [
+            { node: { name: "Product management" } }
+            { node: { name: "Design" } }
+          ]
         }
+        authors: { create: { node: { name: "Marty Cagan" } } }
       }
       {
         isbn: "190962151X"
         title: "Ross Poldark"
         price: 15.52
         description: "Ross Poldark is the first novel in Winston Graham's sweeping saga of Cornish life in the eighteenth century."
-        subjects: { create: [
-          {node: { name: "Historical fiction" }},
-          {node: { name: "Cornwall" }}
-        ]}
-        authors: { create:
-          {node: { name: "Winston Graham" }}
+        subjects: {
+          create: [
+            { node: { name: "Historical fiction" } }
+            { node: { name: "Cornwall" } }
+          ]
         }
+        authors: { create: { node: { name: "Winston Graham" } } }
       }
     ]
   ) {
@@ -431,13 +437,7 @@ mutation {
           create: {
             node: {
               books: {
-                connect: {
-                  where: {
-                    node: {
-                      title: "Graph Algorithms"
-                    }
-                  }
-                }
+                connect: { where: { node: { title: "Graph Algorithms" } } }
               }
               shipTo: {
                 create: {
@@ -453,20 +453,16 @@ mutation {
             }
           }
         }
-      },
+      }
       {
         username: "BookLover123"
         reviews: {
           create: [
             {
-              node:{
+              node: {
                 rating: 4
                 text: "Beautiful depiction of Cornwall."
-                book: {
-                  connect: {
-                    where: { node: { isbn: "190962151X" } }
-                  }
-                }
+                book: { connect: { where: { node: { isbn: "190962151X" } } } }
               }
             }
           ]
@@ -485,7 +481,10 @@ mutation {
                 create: {
                   node: {
                     address: "Nordenskiöldsgatan 24, 211 19 Malmö, Sweden"
-                    location: { latitude: 55.6122270502, longitude: 12.99481772774 }
+                    location: {
+                      latitude: 55.6122270502
+                      longitude: 12.99481772774
+                    }
                   }
                 }
               }
@@ -570,55 +569,51 @@ Authorization: Bearer {{authToken}}
 mutation {
   # inspired
   inspired: updateBooks(
-    where: {
-      title:"Inspired"
-    },
+    where: { title: "Inspired" }
     create: {
-        subjects: [
-          { node: { name: "Product management" } },
-          { node: { name: "Design" } },
-        ]
-      }
+      subjects: [
+        { node: { name: "Product management" } }
+        { node: { name: "Design" } }
+      ]
+    }
   ) {
-    books{
+    books {
       title
-      subjects{
+      subjects {
         name
       }
     }
   }
   # poldark
   poldark: updateBooks(
-    where: {
-      title:"Ross Poldark"
-    },
+    where: { title: "Ross Poldark" }
     create: {
       subjects: [
-          { node: { name: "Historical fiction" } },
-          { node: { name: "Cornwall" } },
+        { node: { name: "Historical fiction" } }
+        { node: { name: "Cornwall" } }
       ]
     }
   ) {
-    books{
+    books {
       title
-      subjects{
+      subjects {
         name
       }
     }
   }
   # algorithms
   algorithms: updateBooks(
-    where:{title:"Graph Algorithms"},
+    where: { title: "Graph Algorithms" }
     create: {
       subjects: [
-        { node: { name: "Graph theory" } },
-        { node: { name: "Neo4j" } },
+        { node: { name: "Graph theory" } }
+        { node: { name: "Neo4j" } }
       ]
     }
   ) {
-    books{
+    books {
       title
-      subjects{
+      subjects {
         name
       }
     }
@@ -694,17 +689,25 @@ mutation {
     input: {
       username: "EmilEifrem7474"
       reviews: {
-        connect: { where: { text: "Best overview of graph data science!" } }
+        connect: {
+          where: { node: { text: "Best overview of graph data science!" } }
+        }
       }
       orders: {
         create: {
-          books: { connect: { where: { title: "Graph Algorithms" } } }
-          shipTo: {
-            create: {
-              address: "111 E 5th Ave, San Mateo, CA 94401"
-              location: {
-                latitude: 37.5635980790
-                longitude: -122.322243272725
+          node: {
+            books: {
+              connect: { where: { node: { title: "Graph Algorithms" } } }
+            }
+            shipTo: {
+              create: {
+                node: {
+                  address: "111 E 5th Ave, San Mateo, CA 94401"
+                  location: {
+                    latitude: 37.5635980790
+                    longitude: -122.322243272725
+                  }
+                }
               }
             }
           }
@@ -734,7 +737,9 @@ mutation {
   }
 }
 
-### MATCH (a) DETACH DELETE a
+### ------------------------------------------------------------------------
+### MATCH (n) DETACH DELETE n
+### ------------------------------------------------------------------------
 
 ### seedPart21
 // @name seedPart21
@@ -791,20 +796,26 @@ mutation {
         username: "EmilEifrem7474"
         reviews: {
           create: {
-            rating: 5
-            text: "Best overview of graph data science!"
-            book: { connect: { where: { isbn: "1492047686" } } }
+          node: {
+              rating: 5
+              text: "Best overview of graph data science!"
+              book: { connect: { where: { node: { isbn: "1492047686" } } } }
+            }
           }
         }
         orders: {
           create: {
-            books: { connect: { where: { title: "Graph Algorithms" } } }
-            shipTo: {
-              create: {
-                address: "111 E 5th Ave, San Mateo, CA 94401"
-                location: {
-                  latitude: 37.5635980790
-                  longitude: -122.322243272725
+            node: {
+              books: { connect: { where: { node: { title: "Graph Algorithms" } } } }
+              shipTo: {
+                create: {
+                  node: {
+                    address: "111 E 5th Ave, San Mateo, CA 94401"
+                    location: {
+                      latitude: 37.5635980790
+                      longitude: -122.322243272725
+                    }
+                  }
                 }
               }
             }
@@ -816,25 +827,31 @@ mutation {
         reviews: {
           create: [
             {
-              rating: 4
-              text: "Beautiful depiction of Cornwall."
-              book: { connect: { where: { isbn: "190962151X" } } }
+              node: {
+                rating: 4
+                text: "Beautiful depiction of Cornwall."
+                book: { connect: { where: { node: { isbn: "190962151X" } } } }
+              }
             }
           ]
         }
         orders: {
           create: {
-            books: {
-              connect: [
-                { where: { title: "Ross Poldark" } }
-                { where: { isbn: "1119387507" } }
-                { where: { isbn: "1492047686" } }
-              ]
-            }
-            shipTo: {
-              create: {
-                address: "Nordenskiöldsgatan 24, 211 19 Malmö, Sweden"
-                location: { latitude: 55.6122270502, longitude: 12.99481772774 }
+            node: {
+              books: {
+                connect: [
+                  { where: { node: { title: "Ross Poldark" } } }
+                  { where: { node: { isbn: "1119387507" } } }
+                  { where: { node: { isbn: "1492047686" } } }
+                ]
+              }
+              shipTo: {
+                create: {
+                  node: {
+                    address: "Nordenskiöldsgatan 24, 211 19 Malmö, Sweden"
+                    location: { latitude: 55.6122270502, longitude: 12.99481772774 }
+                  }
+                }
               }
             }
           }
@@ -859,7 +876,7 @@ X-REQUEST-TYPE: {{requestType}}
 Authorization: Bearer {{authToken}}
 
 query {
-  books(options: { sort: { price: DESC }, limit: 5, skip: 1 }) {
+  books(options: { sort: { price: DESC }, limit: 5, offset: 1 }) {
     title
     price
   }
@@ -951,9 +968,10 @@ query {
   }
 }
 
+### ------------------------------------------------------------------------
 ### part 3 : Adding Custom Logic
-
-### MATCH (a) DETACH DELETE a
+### MATCH (n) DETACH DELETE n
+### ------------------------------------------------------------------------
 
 ### seedPart31
 // @name seedPart31
@@ -971,9 +989,17 @@ mutation {
         title: "Graph Algorithms"
         price: 37.48
         description: "Practical Examples in Apache Spark and Neo4j"
-        subjects: { create: [{ name: "Graph theory" }, { name: "Neo4j" }] }
+        subjects: {
+          create: [
+            { node: { name: "Graph theory" } }
+            { node: { name: "Neo4j" } }
+          ]
+        }
         authors: {
-          create: [{ name: "Mark Needham" }, { name: "Amy E. Hodler" }]
+          create: [
+            { node: { name: "Mark Needham" } }
+            { node: { name: "Amy E. Hodler" } }
+          ]
         }
       }
       {
@@ -982,9 +1008,12 @@ mutation {
         price: 21.38
         description: "How to Create Tech Products Customers Love"
         subjects: {
-          create: [{ name: "Product management" }, { name: "Design" }]
+          create: [
+            { node: { name: "Product management" } }
+            { node: { name: "Design" } }
+          ]
         }
-        authors: { create: { name: "Marty Cagan" } }
+        authors: { create: { node: { name: "Marty Cagan" } } }
       }
       {
         isbn: "190962151X"
@@ -992,9 +1021,12 @@ mutation {
         price: 15.52
         description: "Ross Poldark is the first novel in Winston Graham's sweeping saga of Cornish life in the eighteenth century."
         subjects: {
-          create: [{ name: "Historical fiction" }, { name: "Cornwall" }]
+          create: [
+            { node: { name: "Historical fiction" } }
+            { node: { name: "Cornwall" } }
+          ]
         }
-        authors: { create: { name: "Winston Graham" } }
+        authors: { create: { node: { name: "Winston Graham" } } }
       }
     ]
   ) {
@@ -1003,6 +1035,7 @@ mutation {
     }
   }
 }
+
 
 ### seedPart32
 // @name seedPart32
@@ -1019,20 +1052,28 @@ mutation {
         username: "EmilEifrem7474"
         reviews: {
           create: {
-            rating: 5
-            text: "Best overview of graph data science!"
-            book: { connect: { where: { isbn: "1492047686" } } }
+            node: {
+              rating: 5
+              text: "Best overview of graph data science!"
+              book: { connect: { where: { node: { isbn: "1492047686" } } } }
+            }
           }
         }
         orders: {
           create: {
-            books: { connect: { where: { title: "Graph Algorithms" } } }
-            shipTo: {
-              create: {
-                address: "111 E 5th Ave, San Mateo, CA 94401"
-                location: {
-                  latitude: 37.5635980790
-                  longitude: -122.322243272725
+            node: {
+              books: {
+                connect: { where: { node: { title: "Graph Algorithms" } } }
+              }
+              shipTo: {
+                create: {
+                  node: {
+                    address: "111 E 5th Ave, San Mateo, CA 94401"
+                    location: {
+                      latitude: 37.5635980790
+                      longitude: -122.322243272725
+                    }
+                  }
                 }
               }
             }
@@ -1044,25 +1085,34 @@ mutation {
         reviews: {
           create: [
             {
-              rating: 4
-              text: "Beautiful depiction of Cornwall."
-              book: { connect: { where: { isbn: "190962151X" } } }
+              node: {
+                rating: 4
+                text: "Beautiful depiction of Cornwall."
+                book: { connect: { where: { node: { isbn: "190962151X" } } } }
+              }
             }
           ]
         }
         orders: {
           create: {
-            books: {
-              connect: [
-                { where: { title: "Ross Poldark" } }
-                { where: { isbn: "1119387507" } }
-                { where: { isbn: "1492047686" } }
-              ]
-            }
-            shipTo: {
-              create: {
-                address: "Nordenskiöldsgatan 24, 211 19 Malmö, Sweden"
-                location: { latitude: 55.6122270502, longitude: 12.99481772774 }
+            node: {
+              books: {
+                connect: [
+                  { where: { node: { title: "Ross Poldark" } } }
+                  { where: { node: { isbn: "1119387507" } } }
+                  { where: { node: { isbn: "1492047686" } } }
+                ]
+              }
+              shipTo: {
+                create: {
+                  node: {
+                    address: "Nordenskiöldsgatan 24, 211 19 Malmö, Sweden"
+                    location: {
+                      latitude: 55.6122270502
+                      longitude: 12.99481772774
+                    }
+                  }
+                }
               }
             }
           }
@@ -1075,6 +1125,7 @@ mutation {
     }
   }
 }
+
 
 ### orderSubTotal
 // @name orderSubTotal
@@ -1096,6 +1147,7 @@ query {
 
 ### booksRecommendedBooks
 // @name booksRecommendedBooks
+// TODO: return empty array, maybe is related to logged use
 
 POST {{gqlUri}} HTTP/1.1
 Content-Type: {{contentType}}
@@ -1107,7 +1159,7 @@ query {
     username
     # use defaults
     # recommended {
-    recommended(limit:1) {
+    recommended(limit: 3) {
       title
     }
   }
@@ -1116,6 +1168,7 @@ query {
 ### ordersCurrentWeather
 // @name ordersCurrentWeather
 // query an external API to fetch this data using the apoc.load.json
+// NOTE: long request, this will request from external weather api
 
 POST {{gqlUri}} HTTP/1.1
 Content-Type: {{contentType}}
@@ -1216,10 +1269,10 @@ Authorization: Bearer {{authToken}}
 // TODO: this one must only see it's orders, seems that the customer is null
 // auth test allow customer owner
 query {
-  orders(where: {customer:{username: "EmilEifrem7474"}}){
+  orders(where: { customer: { username: "EmilEifrem7474" } }) {
     orderID
     shippingCost
-    customer{
+    customer {
       username
     }
   }
@@ -1231,16 +1284,16 @@ query {
 POST {{gqlUri}} HTTP/1.1
 Content-Type: {{contentType}}
 X-REQUEST-TYPE: {{requestType}}
-# Authorization: Bearer {{authToken}}
+Authorization: Bearer {{authToken}}
+// bind If a customer tries to create a review and connect it to a customer other than themselves the mutation will return an error. Try running this mutation using our example JWT. Does it work? Can you tell why?
 
-bind If a customer tries to create a review and connect it to a customer other than themselves the mutation will return an error. Try running this mutation using our example JWT. Does it work? Can you tell why?
 mutation {
   createReviews(
     input: {
       rating: 1
       text: "Borrring"
-      book: { connect: { where: { title: "Ross Poldark" } } }
-      author: { connect: { where: { username: "BookLover123" } } }
+      book: { connect: { where: { node: { title: "Ross Poldark" } } } }
+      author: { connect: { where: { node: { username: "BookLover123" } } } }
     }
   ) {
     reviews {
@@ -1253,14 +1306,22 @@ mutation {
   }
 }
 
-bind now with owner
+### ordersByCustomer
+// @name ordersByCustomer
+
+POST {{gqlUri}} HTTP/1.1
+Content-Type: {{contentType}}
+X-REQUEST-TYPE: {{requestType}}
+Authorization: Bearer {{authToken}}
+// bind now with owner
+
 mutation {
   createReviews(
     input: {
       rating: 1
       text: "Borrring"
-      book: { connect: { where: { title: "Ross Poldark" } } }
-      author: { connect: { where: { username: "EmilEifrem7474" } } }
+      book: { connect: { where: { node: { title: "Ross Poldark" } } } }
+      author: { connect: { where: { node: { username: "EmilEifrem7474" } } } }
     }
   ) {
     reviews {
@@ -1272,6 +1333,10 @@ mutation {
     }
   }
 }
+
+### ------------------------------------------------------------------------
+### snippets
+### ------------------------------------------------------------------------
 
 ### templateSnippet
 // @name templateSnippet
