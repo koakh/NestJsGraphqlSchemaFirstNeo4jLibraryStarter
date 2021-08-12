@@ -12,7 +12,7 @@ A minimal nestjs/neo4j graphql library starter, to follow graphacademy `intro to
 
 ## Important NOTES
 
-there are two similar projects to follow tutorial, a simple one with nodejs and a nestjs, nestjs is more like a starter with authentication and lerna, useful if one needs to bootstrap a neo4j graphql based project boilerplate, project repositories are here:
+there are two similar projects to follow tutorial, a simple one with nodejs and other with nestjs, nestjs is more like a starter with authentication and lerna, useful if one needs to bootstrap a neo4j graphql based project boilerplate, project repositories are here:
 
 - [TypescriptNodeBuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary](https://github.com/koakh/TypescriptNodeBuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary)
 - [NestJsGraphqlSchemaFirstNeo4jLibraryStarter](https://github.com/koakh/NestJsGraphqlSchemaFirstNeo4jLibraryStarter)
