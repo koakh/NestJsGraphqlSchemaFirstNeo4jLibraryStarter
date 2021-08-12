@@ -1,5 +1,23 @@
 # README
 
+A minimal nestjs starter, to follow graphacademy `intro to graphql & neo4j - building graphql apis using the neo4j graphql library` tutorial
+
+## Important NOTES
+
+Neo4j/BuildingGraphQLAPIsUsingTheNeo4jGraphQLLibrary/schema.graphql
+    admin
+Neo4j/NestJsGraphqlSchemaFirstNeo4jLibraryStarter/packages/backend/src/schema.graphql
+    ROLE_ADMIN
+
+- [Troubleshooting - Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/troubleshooting/)
+
+- `@neo4j/graphql:*` - Logs all
+- `@neo4j/graphql:auth` - Logs the status of authorization header and token extraction, and decoding of JWT
+- `@neo4j/graphql:graphql` - Logs the GraphQL query and variables
+- `@neo4j/graphql:execute` - Logs the Cypher and Cypher paramaters before execution, and summary of execution
+
+ex add `DEBUG=@neo4j/graphql:auth` to `debug` script
+
 ## Launch database and seed data
 
 > bellow steps are only required first time, `MATCH (a) DETACH DELETE a` query can be used more than one time to tearDown/drop database
