@@ -54,7 +54,7 @@ import { OgmService } from './common/modules/ogm/ogm.service';
       inject: [ConfigService, AuthService],
       useFactory: async (configService: ConfigService, authService: AuthService) => ({
         // require to pass req for authentication
-        context: ({ req, res, payload, connection }: GqlContext) => ({ req, res, payload, connection, driver }),
+        context: ({ req, res, payload, connection }: GqlContext) => ({ req, res, payload, connection, driver: driver() }),
         debug: true,
         playground: true,
         installSubscriptionHandlers: true,
@@ -117,6 +117,7 @@ import { OgmService } from './common/modules/ogm/ogm.service';
     UserService,
     // if we export here JwtModule, we don't need the duplicated code in auth.module
     JwtModule,
+    OgmService,
   ],
   controllers: [
     AuthController

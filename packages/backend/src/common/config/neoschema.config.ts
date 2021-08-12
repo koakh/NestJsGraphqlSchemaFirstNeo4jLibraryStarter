@@ -8,7 +8,7 @@ if (!fs.existsSync(path.join(__dirname, schemaGraphql))) {
   throw new Error(`can't open schemaGraphql: ${schemaGraphql}`);
 };
 // load GraphQL type definitions from schema.graphql file
-const typeDefs = fs
+export const typeDefs = fs
   .readFileSync(path.join(__dirname, schemaGraphql))
   .toString('utf-8');
 

@@ -1,5 +1,6 @@
 import { AuthUser, CurrentUserPayload, User, UserRoles, UserServiceAbstract } from "@koakh/nestjs-package-jwt-authentication-graphql";
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { OgmService } from "../common/modules/ogm/ogm.service";
 import { PaginationArgs } from '../common/arg-types';
 import { newUuid } from '../common/utils/main.util';
 import { DeleteUserInput, NewUserInput, UpdateUserInput, UpdateUserPasswordInput, UpdateUserProfileInput } from './input-type';
@@ -15,6 +16,10 @@ export class UserService implements UserServiceAbstract {
   usersStore: UserStore = new UserStore();
   // init usersStore
   usersData: UserInMemory = new UserInMemory();
+
+  constructor(
+    private ogmService: OgmService,
+  ) {}
 
   validateFreeUserEmail = (username: string, email: string) => {
     const findUser = this.usersData.find((e: UserData) => e.username === username || e.email === email, c.adminCurrentUser);
@@ -50,6 +55,7 @@ export class UserService implements UserServiceAbstract {
   }
 
   async findOneByField(key: string, value: string, currentUser?: CurrentUserPayload): Promise<AuthUser> {
+    const emil = await this.ogmService.getCustomer('EmilEifrem7474');
     if (!currentUser) {
       currentUser = c.adminCurrentUser;
     };
