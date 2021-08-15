@@ -1,1 +1,1 @@
-export * from './subscription-event.enum';
+export * from './user-roles.enum';

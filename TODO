@@ -1,9 +1,15 @@
+AuthModule:
+  ☐ refactor all queries and mutations to be consistent with neo4j graphql library ex userRegister/userCreate to createUser(s)
+
 Project:
   ✔ add lerna to project @done(21-08-11 21:49)
   ✔ update nodejs project packages to 2.0 @done(21-08-12 22:49)
   ✔ copy update client.http to project and test all operations @done(21-08-12 22:49)
+  ☐ seed with ogm from neopush sample
+    ☐ create admin user and some johndoes to
   ☐ create same users as in client.http of nodejs project to check recomendations etc
   ☐ create a neo4j ogm driver standalone package, or just a module
+  ☐ @critical clean up stuff from old nestjs sample cats ex scalars date etc
   ☐ @critical must use capitalized Bearer with neo4j? seems so in playground
   ☐ create unique keys
   ☐ userService with neo4j

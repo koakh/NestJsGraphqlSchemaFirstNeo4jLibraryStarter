@@ -16,6 +16,50 @@
 @authToken = {{userLogin.response.body.$.data.userLogin.accessToken}}
 
 ### ------------------------------------------------------------------------
+### NEW authentication with neo4j and without userService
+### ------------------------------------------------------------------------
+
+### mutation: signUp
+// @name signUp
+POST {{gqlUri}} HTTP/1.1
+Content-Type: {{contentType}}
+X-REQUEST-TYPE: {{requestType}}
+
+mutation signUp($signUpInput: SignUpInput!) {
+	signUp(signUpInput: $signUpInput)
+}
+
+{
+	"signUpInput": {
+		"username": "kapa",
+		"password": "12345678",
+		"firstName": "Mário",
+		"lastName": "Monteiro",
+		"email": "mail@koakh.com",
+		"metaData": {
+			"key": "new user registered"
+		}
+	}
+}
+
+### mutation: signUp
+// @name signUp
+POST {{gqlUri}} HTTP/1.1
+Content-Type: {{contentType}}
+X-REQUEST-TYPE: {{requestType}}
+
+mutation signIn($signInInput: SignInInput!) {
+	signIn(signInInput: $signInInput)
+}
+
+{
+	"signInInput": {
+		"username": "kapa",
+		"password": "12345678"
+	}
+}
+
+### ------------------------------------------------------------------------
 ### authentication
 ### bellow is copied from
 ### links-laptop;/home/mario/Development/Neo4j/NestJsGraphqlSchemaFirstNeo4jLibraryStarter/client.http

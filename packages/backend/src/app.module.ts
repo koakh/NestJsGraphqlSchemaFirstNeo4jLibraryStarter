@@ -46,8 +46,9 @@ import { OgmService } from './common/modules/ogm/ogm.service';
         userService,
       }),
     }),
-    // project/package modules
-    UserModule,
+// TODO:
+// project/package modules
+// UserModule,
     // graphql
     GraphQLModule.forRootAsync({
       imports: [ConfigModule],
@@ -59,8 +60,9 @@ import { OgmService } from './common/modules/ogm/ogm.service';
         playground: true,
         installSubscriptionHandlers: true,
         introspection: true,
-        // this enable code first
-        autoSchemaFile: 'schema.gql',
+// TODO:
+// this enable code first
+// autoSchemaFile: 'schema.gql',
         // this enable neo4j schema first
         schema: neoSchema.schema,
         cors: {
@@ -114,9 +116,9 @@ import { OgmService } from './common/modules/ogm/ogm.service';
     OgmService,
   ],
   exports: [
-    UserService,
     // if we export here JwtModule, we don't need the duplicated code in auth.module
     JwtModule,
+    UserService,
     OgmService,
   ],
   controllers: [

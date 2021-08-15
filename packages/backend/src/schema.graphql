@@ -6,6 +6,9 @@
 # The @timestamp directive is used to indicate the property will be automatically updated when the node is created and updated.
 # The @id directive marks a field as a unique identifier and enables auto-generation when the node is created.
 
+# define scalars
+scalar JSON
+
 type Order {
   orderID: ID! @id
   placedAt: DateTime @timestamp
@@ -82,6 +85,18 @@ type Weather {
   windDirection: String
   precipitation: String
   summary: String
+}
+
+type User {
+  id: ID @id
+  username: String!
+  password: String! @private
+  roles: [String!]!
+  firstName: String
+  lastName: String
+  email: String
+  # neo4j don't support json objects, serialize object and store as string
+  metaData: String
 }
 
 extend type Address {
@@ -243,3 +258,24 @@ extend type Review @auth(
     }
   ]
 )
+
+# Custom resolvers
+
+input SignUpInput {
+  username: String!
+  password: String!
+  firstName: String
+  lastName: String
+  email: String
+  metaData: JSON
+}
+
+input SignInInput {
+  username: String!
+  password: String!
+}
+
+type Mutation {
+  signUp(signUpInput: SignUpInput): String!
+  signIn(signInInput: SignInInput!): String!
+}
