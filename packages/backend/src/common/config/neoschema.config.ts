@@ -7,8 +7,7 @@ import { configuration } from './configuration';
 import { comparePassword, createJWT, hashPassword } from '../utils';
 import { UserRoles } from '../enums';
 import { SignInInput, SignUpInput } from '../input-type';
-
-const USER_MODEL = 'User';
+import { constants as c } from '../constants';
 
 const schemaGraphql = '../../schema.graphql';
 if (!fs.existsSync(path.join(__dirname, schemaGraphql))) {
@@ -21,7 +20,7 @@ export const typeDefs = fs
 
 // init ogm
 const ogm = new OGM({ typeDefs, driver: driver() });
-const User = ogm.model(USER_MODEL);
+const User = ogm.model(c.graphTypes.USER);
 
 export const mutationResolvers = {
   signUp: async (_source, { signUpInput }: { signUpInput: SignUpInput }) => {

@@ -1,5 +1,6 @@
-AuthModule:
-  ☐ refactor all queries and mutations to be consistent with neo4j graphql library ex userRegister/userCreate to createUser(s)
+FromNeoPush:
+  ☐ used type typeDefs, and separate in files
+    /home/mario/Development/Neo4j/Neo4JGraphQLLibraryRepoWithSamplesAndNeoPush/examples/neo-push/server/src/gql/index.ts
 
 Project:
   ✔ add lerna to project @done(21-08-11 21:49)
@@ -7,6 +8,8 @@ Project:
   ✔ copy update client.http to project and test all operations @done(21-08-12 22:49)
   ☐ seed with ogm from neopush sample
     ☐ create admin user and some johndoes to
+  ☐ remove userService and authModule from project
+    ☐ use controller refreshToken, mutations for logout, refreshToken, revokeUserRefreshTokens
   ☐ create same users as in client.http of nodejs project to check recomendations etc
   ☐ create a neo4j ogm driver standalone package, or just a module
   ☐ @critical clean up stuff from old nestjs sample cats ex scalars date etc

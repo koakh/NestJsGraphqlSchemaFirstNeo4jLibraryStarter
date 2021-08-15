@@ -1,4 +1,5 @@
-import { AuthController, AuthModule, AuthOptions, AuthService, GqlContext, GqlContextPayload, NEST_GRAPHQL_AUTH_OPTIONS } from '@koakh/nestjs-package-jwt-authentication-graphql';
+import {GqlContext, GqlContextPayload} from './common/interfaces';
+import { AuthController, AuthModule, AuthOptions, AuthService, NEST_GRAPHQL_AUTH_OPTIONS } from '@koakh/nestjs-package-jwt-authentication-graphql';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -55,7 +56,7 @@ import { OgmService } from './common/modules/ogm/ogm.service';
       inject: [ConfigService, AuthService],
       useFactory: async (configService: ConfigService, authService: AuthService) => ({
         // require to pass req for authentication
-        context: ({ req, res, payload, connection }: GqlContext) => ({ req, res, payload, connection, driver: driver() }),
+        context: ({ req, res, payload, connection }: GqlContext) => ({ req, res, payload, connection, driver: driver() } as GqlContext),
         debug: true,
         playground: true,
         installSubscriptionHandlers: true,
@@ -112,12 +113,15 @@ import { OgmService } from './common/modules/ogm/ogm.service';
     // }),
   ],
   providers: [
+    // TODO: remove
     UserService,
     OgmService,
   ],
   exports: [
     // if we export here JwtModule, we don't need the duplicated code in auth.module
+    // TODO: remove
     JwtModule,
+    // TODO: remove
     UserService,
     OgmService,
   ],
