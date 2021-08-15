@@ -8,10 +8,17 @@ import { typeDefs, neo4jDriver as driver } from '../../config';
 @Injectable()
 export class OgmService {
   private ogm: typeof OGM;
+
   constructor() {
     this.ogm = new OGM({ typeDefs, driver: driver() });
   }
 
+  // TODO: use enum
+  getModel(model: string) {
+    return this.ogm.model(model);
+  }
+
+  // TODO: not used anymore
   async getCustomer(username: string) {
     const Customer = this.ogm.model('Customer');
     const [existing] = await Customer.find({

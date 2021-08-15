@@ -2,6 +2,16 @@
 
 A minimal nestjs/neo4j graphql library starter, to follow graphacademy `intro to graphql & neo4j - building graphql apis using the neo4j graphql library` tutorial
 
+## Project stopped at
+
+currently using only schema first, disabled code first with commented bellow line
+
+```typescript
+// autoSchemaFile: 'schema.gql',
+```
+
+seems that using nestjs and mix code first and schema first is not a ideomatic way to work with **neo4j graphql library**, i to akward and in the end we can't use dependency injection and nestjs features, opted to start a nodejs project based on neopush project
+
 ## Links
 
 - [Intro To GraphQL & Neo4j - Building GraphQL APIs Using The Neo4j GraphQL Library](https://neo4j.com/graphacademy/training-graphql-apis/01-graphql-apis-intro-to-graphql/)

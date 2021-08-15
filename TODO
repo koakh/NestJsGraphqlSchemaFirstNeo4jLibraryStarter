@@ -6,6 +6,7 @@ Project:
   ✔ add lerna to project @done(21-08-11 21:49)
   ✔ update nodejs project packages to 2.0 @done(21-08-12 22:49)
   ✔ copy update client.http to project and test all operations @done(21-08-12 22:49)
+  ☐ remove authModule and userModule from project seems that this project can live without that
   ☐ seed with ogm from neopush sample
     ☐ create admin user and some johndoes to
   ☐ remove userService and authModule from project
