@@ -36,7 +36,7 @@ there are some files in common like
 
 ## Launch database and seed data
 
-> bellow steps are only required first time, `MATCH (a) DETACH DELETE a` query can be used more than one time to tearDown/drop database
+> bellow steps are only required first time, `MATCH (a) DETACH DELETE a` query can be used more than one time to tearDown/drop database nodes/relationship's
 
 1. launch neo4j desktop
 2. create database

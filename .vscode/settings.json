@@ -1,5 +1,9 @@
 {
   "files.exclude": {
     "**/dist": true
-  }
+  },
+  "cSpell.words": [
+    "koakh",
+    "nestjs"
+  ]
 }
