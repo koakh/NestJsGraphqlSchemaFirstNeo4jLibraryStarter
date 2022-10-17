@@ -24,7 +24,7 @@ export class UserResolver {
     @Args() paginationArgs: PaginationArgs,
     @CurrentUser() currentUser: CurrentUserPayload,
   ): Promise<User[]> {
-    return await this.userService.findAll(paginationArgs, currentUser);
+    return this.userService.findAll(paginationArgs, currentUser);
   }
 
   @Roles(UserRoles.ROLE_USER)

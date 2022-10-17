@@ -10,7 +10,7 @@ currently using only schema first, disabled code first with commented bellow lin
 // autoSchemaFile: 'schema.gql',
 ```
 
-seems that using nestjs and mix code first and schema first is not a ideomatic way to work with **neo4j graphql library**, i to akward and in the end we can't use dependency injection and nestjs features, opted to start a nodejs project based on neopush project
+seems that using nestjs and mix code first and schema first is not a ideomatic way to work with **neo4j graphql library**, is to akward and in the end we can't use dependency injection and nestjs features, opted to start a nodejs project based on neopush project
 
 ## Links
 
